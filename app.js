@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const db = require("./db/connection");
 const bodyParser = require("body-parser");
+const exphbs = require("express-handlebars");
+const path = require("path");
 
 const PORT = 3000;
 
@@ -13,6 +15,11 @@ app.listen(PORT, function(){
 //app.use(bodyParser, bodyParser.urlencoded({extended: false})); - linha usada no curso, não funcionou
 app.use(express.json()); // Para parsear JSON
 app.use(express.urlencoded({ extended: true })); // Para parsear dados URL-encoded com a opção 'extended' explícita
+
+//handlebars
+app.set("views", path.join(__dirname, "views"));
+app.engine("handlebars", exphbs({defaultLayout: "main"}));
+app.set("view-engine", "handlebars");
 
 // db connection
 db
