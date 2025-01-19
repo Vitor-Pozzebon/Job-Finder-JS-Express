@@ -4,6 +4,7 @@ const db = require("./db/connection");
 const bodyParser = require("body-parser");
 const { engine } = require('express-handlebars');
 const path = require("path");
+const Job = require("./models/Job");
 
 const PORT = 3000;
 
@@ -36,7 +37,13 @@ db
 
 // routes
 app.get("/", (req, res) => {
-    res.render("index");
+    Job.findAll({order: [
+        ["createdAt", "DESC"]
+    ]})
+    .then(jobs => {
+        res.render("index", {jobs});
+    });
+
 });
 
 // jobs routes
