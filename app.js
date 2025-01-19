@@ -2,7 +2,7 @@ const express = require("express");
 const app = express();
 const db = require("./db/connection");
 const bodyParser = require("body-parser");
-const exphbs = require("express-handlebars");
+const { engine } = require('express-handlebars');
 const path = require("path");
 
 const PORT = 3000;
@@ -17,9 +17,12 @@ app.use(express.json()); // Para parsear JSON
 app.use(express.urlencoded({ extended: true })); // Para parsear dados URL-encoded com a opção 'extended' explícita
 
 //handlebars
-app.set("views", path.join(__dirname, "views"));
-app.engine("handlebars", exphbs({defaultLayout: "main"}));
-app.set("view-engine", "handlebars");
+app.set('views', path.join(__dirname, 'views'));
+app.engine('handlebars', engine({ extname: '.handlebars', defaultLayout: "main"}));
+app.set('view engine', 'handlebars');
+
+// static folder
+app.use(express.static(path.join(__dirname, "public")));
 
 // db connection
 db
@@ -33,7 +36,7 @@ db
 
 // routes
 app.get("/", (req, res) => {
-    res.send("Está funcionando...");
+    res.render("index");
 });
 
 // jobs routes
